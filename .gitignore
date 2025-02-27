@@ -1,17 +1,39 @@
-# Python 가상환경
+# Python virtual environment
 venv/
+.venv/
+
+# Byte-compiled / binary files
 __pycache__/
+*.py[cod]
+*$py.class
 
-# 데이터 파일
-*.csv
-*.parquet
-
-# 환경 변수 파일
-.env
-
-# 로그 파일
-logs/
+# Logs and output files
 *.log
+logs/
+logs/*
 
-# VS Code 설정
-.vscode/
+# Environment variables
+.env
+*.env
+secrets/
+
+# Docker related
+*.pid
+*.sock
+*.db
+docker-compose.override.yml
+
+# PostgreSQL Data
+postgres/
+postgres-data/
+*.pgsql
+
+# Spark related (데이터 및 캐시 파일)
+spark-warehouse/
+metastore_db/
+derby.log
+
+# Airflow 관련 불필요한 파일들
+airflow.db
+airflow.cfg
+dags/__pycache__/
