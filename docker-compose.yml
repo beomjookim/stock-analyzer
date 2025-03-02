@@ -15,16 +15,29 @@ services:
       - ./airflow/logs:/opt/airflow/logs
       - ./airflow/plugins:/opt/airflow/plugins
 
-  spark:
+  spark-master:
     image: bitnami/spark:3.3.1
-    container_name: spark
+    container_name: spark-master
     environment:
       - SPARK_MODE=master
+      - SPARK_MASTER_PORT=7077
+      - SPARK_MASTER_WEBUI_PORT=8081 # ✅ Spark UI를 8081에서 실행하도록 설정
     ports:
       - "7077:7077"
       - "8081:8081"
     volumes:
       - ./spark/data:/opt/spark/data
+      - ./data:/opt/spark/data # ✅ `data/` 폴더도 연동 추가
+      - ./src:/opt/spark/src # ✅ VS Code에서 코드 실행 가능하도록 추가
+
+  spark-worker:
+    image: bitnami/spark:3.3.1
+    container_name: spark-worker
+    depends_on:
+      - spark-master
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
 
   postgres:
     image: postgres:13
