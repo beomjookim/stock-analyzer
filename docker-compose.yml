@@ -26,9 +26,9 @@ services:
       - "7077:7077"
       - "8081:8081"
     volumes:
-      - ./spark/data:/opt/spark/data
-      - ./data:/opt/spark/data # ✅ `data/` 폴더도 연동 추가
-      - ./src:/opt/spark/src # ✅ VS Code에서 코드 실행 가능하도록 추가
+      - ./spark/data:/spark/data
+      - ./data:/opt/spark/data # ✅ 변경: /opt/spark/data 로 마운트
+      - "./src:/opt/src" # ✅ 변경: /opt/src 로 마운트
 
   spark-worker:
     image: bitnami/spark:3.3.1
