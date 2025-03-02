@@ -15,6 +15,7 @@ logs/*
 # Environment variables
 .env
 *.env
+gcs-key.json
 secrets/
 
 # Docker related
