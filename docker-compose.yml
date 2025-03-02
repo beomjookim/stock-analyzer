@@ -1,5 +1,3 @@
-version: "3.8"
-
 services:
   bigquery:
     image: google/cloud-sdk:latest
