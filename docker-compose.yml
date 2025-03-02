@@ -1,4 +1,16 @@
+version: "3.8"
+
 services:
+  bigquery:
+    image: google/cloud-sdk:latest
+    container_name: bigquery
+    command: tail -f /dev/null
+    volumes:
+      - ~/.config/gcloud:/root/.config/gcloud
+      - ./gcs-key.json:/gcs-key.json # ✅ GCS API 키 추가
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/gcs-key.json # ✅ 환경 변수 추가
+
   spark-master:
     image: bitnami/spark:3.3.1
     container_name: spark-master
@@ -6,15 +18,12 @@ services:
       - SPARK_MODE=master
       - SPARK_MASTER_PORT=7077
       - SPARK_MASTER_WEBUI_PORT=8081
-      - GOOGLE_APPLICATION_CREDENTIALS=/opt/gcs/gcs-key.json # ✅ 환경 변수 추가
+      - GOOGLE_APPLICATION_CREDENTIALS=/gcs-key.json # ✅ 환경 변수 추가
     ports:
       - "7077:7077"
       - "8081:8081"
     volumes:
-      - ./spark/data:/spark/data
-      - ./data:/opt/spark/data
-      - "./src:/opt/src"
-      - "./gcs-key.json:/opt/gcs/gcs-key.json" # ✅ GCS 키 파일 컨테이너에 마운트
+      - ./gcs-key.json:/gcs-key.json # ✅ GCS API 키 추가
 
   spark-worker:
     image: bitnami/spark:3.3.1
@@ -24,10 +33,6 @@ services:
     environment:
       - SPARK_MODE=worker
       - SPARK_MASTER_URL=spark://spark-master:7077
-
-  bigquery:
-    image: google/cloud-sdk:latest
-    container_name: bigquery
-    command: tail -f /dev/null
+      - GOOGLE_APPLICATION_CREDENTIALS=/gcs-key.json # ✅ 환경 변수 추가
     volumes:
-      - ~/.config/gcloud:/root/.config/gcloud
+      - ./gcs-key.json:/gcs-key.json # ✅ GCS API 키 추가
