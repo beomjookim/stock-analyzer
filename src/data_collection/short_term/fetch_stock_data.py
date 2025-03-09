@@ -59,7 +59,7 @@ if __name__ == "__main__":
 
     # GCS 저장 경로 설정
     BUCKET_NAME = os.getenv("BUCKET_NAME", "your-bucket-name")  # 환경 변수에서 가져오기
-    GCS_PATH = f"short_term/collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
+    GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
 
     # GCS로 업로드
     upload_to_gcs(BUCKET_NAME, GCS_PATH, stock_df)

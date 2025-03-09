@@ -1,6 +1,5 @@
 FROM bitnami/spark:3.3.1
 
-# Python 패키지 및 GCS SDK 설치
 USER root
 
 # 기본 패키지 업데이트 및 설치
@@ -9,12 +8,23 @@ RUN apt-get update && apt-get install -y \
     curl \
     apt-transport-https \
     ca-certificates \
-    gnupg
+    gnupg \
+    openjdk-11-jdk
 
 # GCP SDK 설치
 RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
     echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
     apt-get update && apt-get install -y google-cloud-sdk
+
+# 1. Spark JAR 디렉토리 생성
+RUN mkdir -p /opt/spark/jars
+
+# 2. GCS Hadoop Connector 다운로드
+RUN curl -o /opt/spark/jars/gcs-connector-hadoop3-2.2.5.jar https://storage.googleapis.com/hadoop-lib/gcs/gcs-connector-hadoop3-2.2.5.jar
+
+# 3. Hadoop AWS JAR 추가 (필요할 경우)
+RUN curl -o /opt/spark/jars/hadoop-aws-3.2.0.jar https://repo1.maven.org/maven2/org/apache/hadoop/hadoop-aws/3.2.0/hadoop-aws-3.2.0.jar
+RUN curl -o /opt/spark/jars/aws-java-sdk-bundle-1.11.375.jar https://repo1.maven.org/maven2/com/amazonaws/aws-java-sdk-bundle/1.11.375/aws-java-sdk-bundle-1.11.375.jar
 
 # Python 라이브러리 설치
 RUN pip3 install --no-cache-dir \
@@ -22,7 +32,20 @@ RUN pip3 install --no-cache-dir \
     yfinance \
     pandas \
     requests \
-    beautifulsoup4
+    beautifulsoup4 \
+    pyspark
+
+# 🔹 GCS 인증 자동화
+ENV GOOGLE_APPLICATION_CREDENTIALS="/opt/keys/gcs-key.json"
+RUN echo 'gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS' >> ~/.bashrc
+
+# Spark 설정 추가
+ENV SPARK_CLASSPATH="/opt/spark/jars/gcs-connector-hadoop3-2.2.5.jar:/opt/spark/jars/hadoop-aws-3.2.0.jar:/opt/spark/jars/aws-java-sdk-bundle-1.11.375.jar"
+
+RUN echo "spark.jars=/opt/spark/jars/gcs-connector-hadoop3-2.2.5.jar" >> /opt/bitnami/spark/conf/spark-defaults.conf
+RUN echo "spark.hadoop.fs.gs.impl=com.google.cloud.hadoop.fs.gcs.GoogleHadoopFileSystem" >> /opt/bitnami/spark/conf/spark-defaults.conf
+RUN echo "spark.hadoop.fs.gs.auth.service.account.enable=true" >> /opt/bitnami/spark/conf/spark-defaults.conf
+RUN echo "spark.hadoop.google.cloud.auth.service.account.json.keyfile=/opt/keys/gcs-key.json" >> /opt/bitnami/spark/conf/spark-defaults.conf
 
 # 작업 디렉토리 설정
 WORKDIR /opt/spark

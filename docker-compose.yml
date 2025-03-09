@@ -30,6 +30,7 @@ services:
       - SPARK_MASTER_PORT=7077
       - SPARK_MASTER_WEBUI_PORT=8081
       - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/gcs-key.json
+      - SPARK_CLASSPATH=/opt/spark/jars/gcs-connector-hadoop3-latest.jar
     ports:
       - "7077:7077"
       - "8081:8081"
