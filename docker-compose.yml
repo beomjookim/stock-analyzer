@@ -1,24 +1,27 @@
 services:
-  airflow:
-    image: apache/airflow:2.6.1
-    container_name: airflow
-    restart: always
-    env_file:
-      - .env
-    environment:
-      - LOAD_EX=n
-      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-    ports:
-      - "8080:8080"
-    volumes:
-      - ./airflow/dags:/opt/airflow/dags
-      - ./airflow/logs:/opt/airflow/logs
-      - ./airflow/plugins:/opt/airflow/plugins
-      - ./keys:/opt/keys
+  # airflow:
+  #   image: apache/airflow:2.6.1
+  #   container_name: airflow
+  #   restart: always
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     - LOAD_EX=n
+  #     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+  #     - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+  #   ports:
+  #     - "8080:8080"
+  #   volumes:
+  #     - ./airflow/dags:/opt/airflow/dags
+  #     - ./airflow/logs:/opt/airflow/logs
+  #     - ./airflow/plugins:/opt/airflow/plugins
+  #     - ./keys:/opt/keys
 
   spark-master:
-    image: bitnami/spark:3.3.1
+    build:
+      context: .
+      dockerfile: Dockerfile.spark
+    image: spark-custom
     container_name: spark-master
     env_file:
       - .env
@@ -26,7 +29,7 @@ services:
       - SPARK_MODE=master
       - SPARK_MASTER_PORT=7077
       - SPARK_MASTER_WEBUI_PORT=8081
-      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/gcs-key.json
     ports:
       - "7077:7077"
       - "8081:8081"
@@ -34,7 +37,7 @@ services:
       - ./spark/data:/spark/data
       - ./data:/opt/spark/data
       - "./src:/opt/src"
-      - ./keys:/opt/keys
+      - "./keys/gcs-key.json:/opt/keys/gcs-key.json"
 
   spark-worker:
     image: bitnami/spark:3.3.1
@@ -50,12 +53,12 @@ services:
     volumes:
       - ./keys:/opt/keys
 
-  bigquery:
-    image: google/cloud-sdk:latest
-    container_name: bigquery
-    command: tail -f /dev/null
-    env_file:
-      - .env
-    volumes:
-      - ~/.config/gcloud:/root/.config/gcloud
-      - ./keys:/opt/keys
+  # bigquery:
+  #   image: google/cloud-sdk:latest
+  #   container_name: bigquery
+  #   command: tail -f /dev/null
+  #   env_file:
+  #     - .env
+  #   volumes:
+  #     - ~/.config/gcloud:/root/.config/gcloud
+  #     - ./keys:/opt/keys

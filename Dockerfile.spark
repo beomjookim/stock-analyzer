@@ -1,0 +1,34 @@
+FROM bitnami/spark:3.3.1
+
+# Python 패키지 및 GCS SDK 설치
+USER root
+
+# 기본 패키지 업데이트 및 설치
+RUN apt-get update && apt-get install -y \
+    python3-pip \
+    curl \
+    apt-transport-https \
+    ca-certificates \
+    gnupg
+
+# GCP SDK 설치
+RUN curl -fsSL https://packages.cloud.google.com/apt/doc/apt-key.gpg | apt-key add - && \
+    echo "deb https://packages.cloud.google.com/apt cloud-sdk main" | tee -a /etc/apt/sources.list.d/google-cloud-sdk.list && \
+    apt-get update && apt-get install -y google-cloud-sdk
+
+# Python 라이브러리 설치
+RUN pip3 install --no-cache-dir \
+    google-cloud-storage \
+    yfinance \
+    pandas \
+    requests \
+    beautifulsoup4
+
+# 작업 디렉토리 설정
+WORKDIR /opt/spark
+
+# 소스 코드 복사
+COPY ./src /opt/spark/src
+
+# spark-master 실행
+CMD ["/opt/bitnami/spark/bin/spark-class", "org.apache.spark.deploy.master.Master"]
