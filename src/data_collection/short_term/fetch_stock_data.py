@@ -4,13 +4,13 @@ import os
 import datetime
 from fetch_tickers import get_top_50_sp500_tickers
 
-def fetch_stock_data(tickers, period="5d"):  # ✅ 최근 5일간 데이터 가져오기
+def fetch_stock_data(tickers, period="5d"):
     stock_data = []
 
     for ticker in tickers:
         try:
             stock = yf.Ticker(ticker)
-            hist = stock.history(period=period)  # ✅ 변경: 1일 → 5일
+            hist = stock.history(period=period)
 
             if not hist.empty:
                 for date, row in hist.iterrows():
@@ -30,7 +30,7 @@ def fetch_stock_data(tickers, period="5d"):  # ✅ 최근 5일간 데이터 가�
 
 if __name__ == "__main__":
     tickers = get_top_50_sp500_tickers()
-    stock_df = fetch_stock_data(tickers, period="5d")  # ✅ 최근 5일 데이터 가져옴
+    stock_df = fetch_stock_data(tickers, period="5d")
 
     save_dir = "data/short_term/collected"
     os.makedirs(save_dir, exist_ok=True)
