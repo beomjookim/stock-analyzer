@@ -32,7 +32,7 @@ if __name__ == "__main__":
     tickers = get_top_50_sp500_tickers()
     stock_df = fetch_stock_data(tickers, period="5d")  # ✅ 최근 5일 데이터 가져옴
 
-    save_dir = "data/short_term"
+    save_dir = "data/short_term/collected"
     os.makedirs(save_dir, exist_ok=True)
 
     today = datetime.datetime.today().strftime('%Y%m%d')
