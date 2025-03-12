@@ -14,7 +14,7 @@ response = requests.get(URL, headers=headers)
 
 # 요청 성공 확인
 if response.status_code != 200:
-    print(f"❌ 요청 실패: {response.status_code}")
+    print(f"요청 실패: {response.status_code}")
     exit()
 
 # HTML 파싱
@@ -31,7 +31,7 @@ for year in years:
     section = soup.find("section", {"id": f"{year}y"})
 
     if not section:
-        print(f"❌ {year}년 데이터 없음")
+        print(f"{year}년 데이터 없음")
         continue
 
     companies = []
@@ -44,7 +44,7 @@ for year in years:
             companies.append(company_name)
 
     yearly_companies[year] = companies
-    print(f"✅ {year}년 데이터 수집 완료: {companies}")
+    print(f"{year}년 데이터 수집 완료: {companies}")
 
     time.sleep(1)  # 너무 빠른 요청 방지
 
