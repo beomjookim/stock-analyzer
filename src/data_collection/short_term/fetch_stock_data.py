@@ -20,7 +20,7 @@ def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
 
     print(f"Data successfully uploaded to gs://{bucket_name}/{destination_blob_name}")
 
-def fetch_stock_data(tickers, period="5d"):
+def fetch_stock_data(tickers, period="30d"):
     stock_data = []
     for ticker in tickers:
         try:
@@ -45,7 +45,7 @@ def fetch_stock_data(tickers, period="5d"):
 
 if __name__ == "__main__":
     tickers = get_top_50_sp500_tickers()
-    stock_df = fetch_stock_data(tickers, period="5d")
+    stock_df = fetch_stock_data(tickers, period="30d")
 
     # 로컬 저장
     save_dir = "data/short_term/collected"
@@ -58,7 +58,7 @@ if __name__ == "__main__":
     print(f"Data saved to {save_path}")
 
     # GCS 저장 경로 설정
-    BUCKET_NAME = os.getenv("BUCKET_NAME", "your-bucket-name")  # 환경 변수에서 가져오기
+    BUCKET_NAME = os.getenv("BUCKET_NAME")  # 환경 변수에서 가져오기
     GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
 
     # GCS로 업로드

@@ -61,7 +61,7 @@ print(f"최적화된 테이블 `{TARGET_TABLE}` 생성 완료!")
 # WHERE Date BETWEEN '2025-03-01' AND '2025-03-10';
 # """
 
-# # 기기존 테이블 쿼리 실행 (속도 측정)
+# # 기존 테이블 쿼리 실행 (속도 측정)
 # print("\n기존존 테이블 쿼리 실행 중...")
 # start_time = time.time()
 # query_job = client.query(test_query)

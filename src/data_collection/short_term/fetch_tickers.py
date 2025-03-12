@@ -32,4 +32,3 @@ def get_top_50_sp500_tickers():
 
 if __name__ == "__main__":
     tickers = get_top_50_sp500_tickers()
-    print(tickers)

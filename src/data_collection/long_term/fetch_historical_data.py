@@ -54,4 +54,4 @@ df = pd.DataFrame.from_dict(yearly_companies, orient="index").transpose()
 # CSV 저장
 df.to_csv("data/long_term/long_term_top20_names.csv", index=False, encoding="utf-8-sig")
 
-print("✅ 모든 연도 데이터 저장 완료!")
+print("모든 연도 데이터 저장 완료!")

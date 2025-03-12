@@ -1,6 +1,6 @@
 import datetime
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col, avg, when
+from pyspark.sql.functions import stddev, col, avg, when
 from pyspark.sql.window import Window
 
 # Spark 세션 생성
@@ -27,6 +27,7 @@ df = spark.read.option("header", True).csv(GCS_INPUT_PATH)
 window_spec = Window.partitionBy("Ticker").orderBy(col("Date").cast("timestamp")).rowsBetween(-4, 0)
 df = df.withColumn("Moving_Avg", avg(col("Close")).over(window_spec))
 df = df.withColumn("Daily_Change", ((col("High") - col("Low")) / col("Open") * 100))
+df = df.withColumn("Volatility", stddev(col("Close")).over(window_spec))
 df = df.withColumn("Volatility", when(col("Volatility").isNull(), 0).otherwise(col("Volatility")))
 
 # BigQuery로 데이터 저장
