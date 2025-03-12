@@ -30,6 +30,10 @@ RUN curl -o /opt/spark/jars/aws-java-sdk-bundle-1.11.375.jar https://repo1.maven
 RUN curl -o /opt/spark/jars/spark-bigquery-with-dependencies_2.12-0.29.0.jar \
     https://repo1.maven.org/maven2/com/google/cloud/spark/spark-bigquery-with-dependencies_2.12/0.29.0/spark-bigquery-with-dependencies_2.12-0.29.0.jar
 
+
+# Google Cloud BigQuery 라이브러리 설치
+RUN pip3 install google-cloud-bigquery
+
 # Python 라이브러리 설치
 RUN pip3 install --no-cache-dir \
     google-cloud-storage \

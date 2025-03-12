@@ -54,12 +54,14 @@ services:
     volumes:
       - ./keys:/opt/keys
 
-  # bigquery:
-  #   image: google/cloud-sdk:latest
-  #   container_name: bigquery
-  #   command: tail -f /dev/null
-  #   env_file:
-  #     - .env
-  #   volumes:
-  #     - ~/.config/gcloud:/root/.config/gcloud
-  #     - ./keys:/opt/keys
+  bigquery-optimizer:
+    build:
+      context: .
+      dockerfile: Dockerfile.bigquery
+    volumes:
+      - ./src/bigquery:/opt/bigquery
+      - ./keys/gcs-key.json:/opt/keys/gcs-key.json
+    environment:
+      - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/gcs-key.json
+    working_dir: /opt/bigquery
+    command: python3 bigquery_optimization.py
