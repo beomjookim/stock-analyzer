@@ -26,74 +26,7 @@
 
 📂 stock-analyzer<br>
 ├── docker-compose.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # docker 전반 환경 설정<br>
-├── Dockerfile.spark&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # spark 관련 도커 환경 구축<br>
-├── Dockerfile.bigquery &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# bigquery 관련 도커 환경 구축<br>
-├── 📂 src/<br>
-│ ├── 📂 data_fetching/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (1) 데이터 수집 (Extract)<br>
-│ │ ├── short_term/<br>
-│ │ │ ├── fetch_tickers.py&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # S&P 500 상위 50개 종목 선정 - 웹 크롤링<br>
-│ │ │ ├── fetch_stock_data.py&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # yFinance에서 지난 1년치 주가 데이터 추출 및 GCS에 raw 데이터 적재<br>
-│ ├── 📂 data_processing/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # (2) 데이터 가공 (Transform) & (3) 데이터 적재 (Load)<br>
-│ │ ├── short_term/<br>
-│ │ │ ├── spark_transformation.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 데이터 변환 & 데이터 마트 생성 & BigQuery에 적재<br>
-│ ├── 📂 bigquery/<br>
-│ │ ├── bigquery_optimization.sql &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# Partitioning & Clustering 최적화, maybe!<br>
-│ │ ├── fact_stock_prices.sql&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 데이터 마트 1<br>
-│ │ ├── fact_fundamental_metrics.sql &nbsp;&nbsp;&nbsp;# 데이터 마트 2<br>
-│ │ ├── fact_technical_indicators.sql&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 데이터 마트 3<br>
-│ ├── 📂 GCS/<br>
-│ │ ├── 📂 short-term/collected<br>
-│ │ │ ├── 📂 sp500_raw_data.csv<br>
-│ │ ├── 📂 temp-load<br>
-│ ├── 📂 visualization/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (4) 데이터 시각화<br>
-│ │ ├── looker_dashboard.json&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Looker Studio 대시보드 설정<br>
-│ │ └── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 시각화 구성 설명<br>
-│ └── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 프로젝트 설명<br>
-
----
-
-## 🔄 2. 데이터 파이프라인 흐름
-
-### **📌 (1) 데이터 수집 (Extract)**
-
-1️⃣ **S&P 500 상위 50개 종목 가져오기** (`fetch_tickers.py`)  
-2️⃣ **Yahoo Finance에서 주가 데이터 수집** (`fetch_stock_data.py`)  
-3️⃣ **GCS (Google Cloud Storage) 에 원본 데이터 저장**  
-
-
----
-
-### **📌 (2) 데이터 변환 (Transform)**
-
-🔥 **Apache Spark를 활용하여 데이터 정제 및 변환**  
-1️⃣ 결측치 및 이상치 처리 (`spark_transformation.py`)  
-2️⃣ 이동평균(Moving Average), RSI(상대강도지수), 변동성(Volatility) 등 계산  
-
-
----
-
-### **📌 (3) 데이터 웨어하우스 (DWH) 구축**
-
-🔥 **BigQuery를 활용하여 Data Warehouse(Data Mart) 설계 및 적재**  
-1️⃣ `fact_stock_prices.sql` → **주가 데이터 테이블**  
-2️⃣ `fact_fundamental_metrics.sql` → **기업 재무 지표 테이블**  
-3️⃣ `fact_technical_indicators.sql` → **기술적 분석 지표 테이블**  
-
-
----
-
-### **📌 (4) 데이터 시각화 (Looker Studio)**
-
-🔥 **Looker Studio에서 대시보드 구축**  
-1️⃣ 지난 1년 S&P 500 상위 50개 종목의 주가 추이 - 전체, 개별 종목 모두 지원  
-2️⃣ 지난 1년 가장 변동성 낮았던 top 5개 종목 추이 - 개별 종목 정보도 지원   
-3️⃣ PER vs. PBR 차트로 주가 상승여력 비교 - 개별 종목 비교 기능 지원  
-4️⃣ 시가총액 순으로 트리맵 형성 - 개별 종목들 비교 기능 지원  
-
-
----
-
-## 🚀 3. 향후 업그레이드 플랜
+├── Dockerfile.spark&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nb들
 
 ✅ **Apache Spark 최적화**
 
