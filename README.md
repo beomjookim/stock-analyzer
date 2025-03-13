@@ -42,7 +42,7 @@
 │ ├── 📂 GCS/<br>
 │ │ ├── 📂 short-term<br>
 │ │ │ ├── 📂 collected<br>
-│ |&nbsp;|&nbsp;| ├── sp500_raw_data.csv<br>
+│ |  |  | ├── sp500_raw_data.csv<br>
 │ │ │ ├── 📂 temp-load<br>
 │ ├── 📂 visualization/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (4) 데이터 시각화<br>
 │ │ ├── looker_dashboard.json&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Looker Studio 대시보드 설정<br>
