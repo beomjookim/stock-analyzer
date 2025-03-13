@@ -1,4 +1,4 @@
-# 📊 S&P 500 Stock Data Pipeline
+# 📊 S&P 500 Stock year-long analyzer
 
 ## 📌 프로젝트 개요
 
