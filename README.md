@@ -40,10 +40,10 @@
 │ │ ├── fact_fundamental_metrics.sql &nbsp;&nbsp;&nbsp;# 데이터 마트 2<br>
 │ │ ├── fact_technical_indicators.sql&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 데이터 마트 3<br>
 │ ├── 📂 GCS/<br>
-│ | ├── 📂 short-term<br>
-│ | | ├── 📂 collected<br>
+│ │ ├── 📂 short-term<br>
+│ │ │ ├── 📂 collected<br>
 │ | | | ├── sp500_raw_data.csv<br>
-│ | | ├── 📂 temp-load<br>
+│ │ │ ├── 📂 temp-load<br>
 │ ├── 📂 visualization/ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# (4) 데이터 시각화<br>
 │ │ ├── looker_dashboard.json&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # Looker Studio 대시보드 설정<br>
 │ │ └── README.md&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 시각화 구성 설명<br>
