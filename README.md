@@ -1,28 +1,31 @@
-temptemptemptemptemptemptemptemptemp
-
 # 📊 S&P 500 Stock Data Pipeline
 
 ## 📌 프로젝트 개요
-이 프로젝트는 **S&P 500 상위 50개 종목**의 지난 1년 간의 주가 데이터를 여러 경로를 통해 추출해서,**ETL (Extract, Transform, Load)** 과정을 거쳐  
-**DWH (Data Warehouse, BigQuery) & DM (Data Mart)** 를 구축하고, 최종적으로 **Looker Studio** 를 활용하여  
-데이터를 시각화하는 Batch 파이프라인을 온전히 구축하는 개인 프로젝트입니다.
+
+저는 재테크에 관심이 많습니다.  
+한동안 단기투자에 빠져서 단기이익을 좇다가 크게 데이고,  
+장기투자에 눈을 뜨고 나서 저의 장기투자를 도와주는 여러 지표를 직접 만들고자 진행한 프로젝트입니다.  
+
+이 프로젝트는 **S&P 500 상위 50개 종목**의 지난 1년 간의 주가 데이터를 여러 경로를 통해 **추출**해서,  
+1차 저장소에 **저장**하고, 가공을 통해 투자 판단에 필요한 정보들로 **변환**하여,  
+결과적으로 3개의 **Data Mart**를 포함한 **Data Warehouse**를 구축하고,  
+이를 Looker Studio로 **시각화**하는 **Batch성 ETL 파이프라인**을 다룹니다.  
 
 ---
 
 ## 🚀 1. 프로젝트 구조
 
 📂 stock-analyzer 
+├── docker-compose.yml                                   # Spark 실행 환경 설정 
 ├── 📂 src/ 
-│ ├── 📂 data_fetching/ # (1) 데이터 수집 (Extract) 
-│ │ ├── fetch_stock_data.py # yFinance에서 주가 데이터 가져와서 GCS에 raw 데이터 업로드
-│ │ ├── fetch_tickers.py # S&P 500 상위 50개 종목 선정 
-│ ├── 📂 data_processing/ # (2) 데이터 변환 (Transform) 
+│ ├── 📂 data_fetching/                                  # (1) 데이터 수집 (Extract) 
 │ │ ├── short_term/ 
-│ │ │ ├── spark_transformation.py #
-│ │ │ ├── bigquery_schema.sql # BigQuery 스키마 생성 쿼리 
-│ │ │ ├── docker-compose.yml # Spark 실행 환경 설정 
-│ │ │ └── README.md # 데이터 변환 과정 설명 
-│ │ ├── 📂 data_warehouse/ # (3) 데이터 적재 (Load) 
+│ │ │ ├── fetch_tickers.py                               # S&P 500 상위 50개 종목 선정 - 웹 크롤링
+│ │ │ ├── fetch_stock_data.py                            # yFinance에서 주가 데이터 가져와서 GCS에 raw 데이터 업로드
+│ ├── 📂 data_processing/                                # (2) 데이터 변환 (Transform) 
+│ │ ├── short_term/ 
+│ │ │ ├── spark_transformation.py                        # GCS에서 데이터 가져와서 가공 후 BigQuery에 적재
+│ ├── 📂 bigquery/                                       # (3) 데이터 마트 생성 (Transform) 
 │ │ ├── bigquery_load.py # BigQuery에 데이터 적재 
 │ │ ├── bigquery_optimization.sql # Partitioning & Clustering 최적화 
 │ │ ├── queries/ # 분석용 SQL 쿼리 저장 
@@ -34,13 +37,10 @@ temptemptemptemptemptemptemptemptemp
 │ │ ├── looker_dashboard.json # Looker Studio 대시보드 설정 
 │ │ ├── looker_queries.sql # 시각화용 SQL 쿼리 
 │ │ └── README.md # 시각화 구성 설명 
-│ │ ├── 📂 docs/ # 문서화 
-│ ├── project_overview.md # 프로젝트 개요 
-│ ├── etl_pipeline.md # ETL 파이프라인 설명 
-│ ├── dwh_design.md # 데이터 웨어하우스(DWH) 설계 문서 
-| ├── visualization_guide.md # Looker Studio 대시보드 사용법 
 │ ├── optimization_guide.md # 성능 최적화 가이드 
 │ └── README.md # 프로젝트 설명
+
+000000000000000000000000000000000000000
 
 
 ---
