@@ -95,7 +95,7 @@
  
  ## 💎 DEMO
  
- https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
+![looker studio demo link](https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9)
 
 ![image](https://github.com/user-attachments/assets/7e701263-a9f3-4b89-aadb-85da7ebc5717)
  기본적으로는, 상위 50개 종목 전반을 다루는 차트가 디스플레이 됩니다.
