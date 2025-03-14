@@ -1,3 +1,4 @@
+from concurrent.futures import ThreadPoolExecutor
 from google.cloud import storage
 import yfinance as yf
 import pandas as pd
@@ -5,6 +6,7 @@ import os
 import datetime
 from fetch_tickers import get_top_50_sp500_tickers
 from io import StringIO
+import time
 
 # GCS 업로드 함수
 def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
@@ -18,67 +20,77 @@ def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
     dataframe.to_csv(csv_buffer, index=False)
     blob.upload_from_string(csv_buffer.getvalue(), content_type="text/csv")
 
-    print(f"Data successfully uploaded to gs://{bucket_name}/{destination_blob_name}")
+    print(f"✅ Data successfully uploaded to gs://{bucket_name}/{destination_blob_name}")
+
+def fetch_single_stock(ticker, period="1y"):
+    """Fetch stock data for a single ticker."""
+    try:
+        stock = yf.Ticker(ticker)
+        hist = stock.history(period=period)
+
+        if hist.empty:
+            return None
+
+        # 원본 데이터 저장 (불필요한 컬럼 제거)
+        hist = hist[["Open", "High", "Low", "Close", "Volume"]]
+        hist["Ticker"] = ticker
+        hist.reset_index(inplace=True)
+
+        # 원본 데이터에 유지해야 하는 재무 정보 추가
+        info = stock.info
+        hist["Market_Cap"] = info.get("marketCap", None)
+        hist["PE_Ratio"] = info.get("trailingPE", None)
+        hist["PB_Ratio"] = info.get("priceToBook", None)
+        hist["Dividend_Yield"] = info.get("trailingAnnualDividendYield", None)
+        hist["EPS"] = info.get("trailingEps", None)
+        hist["52_Week_High"] = info.get("fiftyTwoWeekHigh", None)
+        hist["52_Week_Low"] = info.get("fiftyTwoWeekLow", None)
+
+        return hist
+
+    except Exception as e:
+        print(f"⚠ Error fetching data for {ticker}: {e}")
+        return None
 
 def fetch_stock_data(tickers, period="1y"):
+    """Fetch stock data for multiple tickers using multi-threading."""
     stock_data = []
 
-    for ticker in tickers:
-        try:
-            stock = yf.Ticker(ticker)
-            hist = stock.history(period=period)
+    # 🔹 ThreadPoolExecutor를 사용한 병렬 API 호출 (최대 10개 동시 실행)
+    with ThreadPoolExecutor(max_workers=10) as executor:
+        results = list(executor.map(lambda t: fetch_single_stock(t, period), tickers))
 
-            if not hist.empty:
-                # 📌 변형 없이 원본 데이터만 저장
-                temp_data = []
+    # None 값 제외 후 병합
+    stock_data = [r for r in results if r is not None]
 
-                for date, row in hist.iterrows():
-                    temp_data.append({
-                        "Ticker": ticker,
-                        "Date": date.date(),
-                        "Open": row["Open"],
-                        "High": row["High"],
-                        "Low": row["Low"],
-                        "Close": row["Close"],
-                        "Volume": row["Volume"]
-                    })
+    if stock_data:
+        df = pd.concat(stock_data, ignore_index=True)
 
-                df = pd.DataFrame(temp_data)
+        # 🔹 날짜 기준 정렬 (최신 데이터부터 순서대로)
+        df.sort_values(by=["Ticker", "Date"], ascending=[True, True], inplace=True)
 
-                # 📌 원본 데이터로 유지해야 하는 재무 정보 (Raw Data)
-                info = stock.info
-                df["Market_Cap"] = info.get("marketCap", None)
-                df["PE_Ratio"] = info.get("trailingPE", None)
-                df["PB_Ratio"] = info.get("priceToBook", None)
-                df["Dividend_Yield"] = info.get("trailingAnnualDividendYield", None)
-                df["EPS"] = info.get("trailingEps", None)
-                df["52_Week_High"] = info.get("fiftyTwoWeekHigh", None)
-                df["52_Week_Low"] = info.get("fiftyTwoWeekLow", None)
+        return df
 
-                stock_data.append(df)
-
-        except Exception as e:
-            print(f"⚠ Error fetching data for {ticker}: {e}")
-
-    return pd.concat(stock_data, ignore_index=True) if stock_data else pd.DataFrame()
+    return pd.DataFrame()  # 빈 데이터프레임 반환
 
 if __name__ == "__main__":
+
+    start_time = time.time()  # 시작 시간 기록
+
     tickers = get_top_50_sp500_tickers()
     stock_df = fetch_stock_data(tickers, period="1y")
     today = datetime.datetime.today().strftime('%Y%m%d')
 
-    # 로컬 저장 (테스트용)
-    # save_dir = "data/short_term/collected"
-    # os.makedirs(save_dir, exist_ok=True)
+    if not stock_df.empty:
+        # GCS 저장 경로 설정
+        BUCKET_NAME = os.getenv("BUCKET_NAME")  # 환경 변수에서 가져오기
+        GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
 
-    # save_path = os.path.join(save_dir, f"sp500_top50_{today}.csv")
+        # ✅ 원본 데이터만 GCS에 저장
+        upload_to_gcs(BUCKET_NAME, GCS_PATH, stock_df)
+    else:
+        print("⚠ No data fetched. Check API availability.")
 
-    # stock_df.to_csv(save_path, index=False)
-    # print(f"Data saved to {save_path}")
-
-    # GCS 저장 경로 설정
-    BUCKET_NAME = os.getenv("BUCKET_NAME")  # 환경 변수에서 가져오기
-    GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
-
-    # 원본 데이터만 GCS에 저장
-    upload_to_gcs(BUCKET_NAME, GCS_PATH, stock_df)
+    end_time = time.time()  # 종료 시간 기록
+    execution_time = end_time - start_time  # 실행 시간 계산
+    print(f"⏱ Execution Time: {execution_time:.4f} seconds")
