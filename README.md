@@ -1,6 +1,6 @@
 # 📊 S&P 500 Stock year-long analyzer
  
- ## 📌 프로젝트 개요
+ ## 💎 프로젝트 개요
  
  저는 재테크에 관심이 많습니다.  
  저의 주식 장기투자를 도와주는 여러 지표를 직접 모아서 계산하고, 자동화, 시각화하고자 진행한 프로젝트입니다.
@@ -22,7 +22,7 @@
 
  ---
  
- ## 🚀 1. 프로젝트 구조
+ ## 💎 1. 프로젝트 구조
  
  📂 stock-analyzer<br>
  ├── docker-compose.yml&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # docker 전반 환경 설정<br>
@@ -52,9 +52,9 @@
  
  ---
  
- ## 🔄 2. 데이터 파이프라인 흐름
+ ## 💎 2. 데이터 파이프라인 흐름
  
- ### **📌 (1) 데이터 수집 (Extract)**
+ ### **🔍 (1) 데이터 수집 (Extract)**
  
  1️⃣ **S&P 500 상위 50개 종목 가져오기** (`fetch_tickers.py`)  
  2️⃣ **Yahoo Finance에서 주가 데이터 수집** (`fetch_stock_data.py`)  
@@ -63,7 +63,7 @@
  
  ---
  
- ### **📌 (2) 데이터 변환 (Transform)**
+ ### **🔍 (2) 데이터 변환 (Transform)**
  
  🔥 **Apache Spark를 활용하여 데이터 정제 및 변환**  
  1️⃣ 결측치 및 이상치 처리 (`spark_transformation.py`)  
@@ -72,7 +72,7 @@
  
  ---
  
- ### **📌 (3) 데이터 웨어하우스 (DWH) 구축**
+ ### **🔍 (3) 데이터 웨어하우스 (DWH) 구축**
  
  🔥 **BigQuery를 활용하여 Data Warehouse(Data Mart) 설계 및 적재**  
  1️⃣ `fact_stock_prices.sql` → **주가 데이터 테이블**  
@@ -82,7 +82,7 @@
  
  ---
  
- ### **📌 (4) 데이터 시각화 (Looker Studio)**
+ ### **🔍 (4) 데이터 시각화 (Looker Studio)**
  
  🔥 **Looker Studio에서 대시보드 구축**  
  1️⃣ 지난 1년 S&P 500 상위 50개 종목의 주가 추이 - 전체, 개별 종목 모두 지원  
@@ -93,7 +93,7 @@
 
   ---
  
- ## 🚀 DEMO
+ ## 💎 DEMO
  
  https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
 
@@ -108,25 +108,25 @@
  
  ---
  
- ## 🚀 3. 추후 최적화 계획
+ ## 📣 추후 최적화 계획
  
- ✅ **Apache Spark 최적화**
+ 📝 **Apache Spark 최적화**
  
  - `cache()` & `repartition()` 최적화  
  - `broadcast join` 활용하여 조인 속도 개선  
  
- ✅ **BigQuery 최적화**
+ 📝 **BigQuery 최적화**
  
  - `Partitioning & Clustering` 적용  
  - 불필요한 `SELECT *` 제거  
  
- ✅ **GCS 저장 최적화**
+ 📝 **GCS 저장 최적화**
  
  - CSV 대신 **Parquet + Snappy 압축** 적용  
  - 작은 파일 병합하여 **Spark 처리 속도 향상**  
  
- ✅ **Apache Airflow로 Batch 업무 자동화**
+ 📝 **Apache Airflow로 Batch 업무 자동화**
  
- ✅ **Github action으로 CI/CD 자동화**
+ 📝 **Github action으로 CI/CD 자동화**
  
 
