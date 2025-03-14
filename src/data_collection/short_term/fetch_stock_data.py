@@ -15,6 +15,18 @@ def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
+    # 🔹 컬럼 순서 강제 정렬
+    expected_columns = [
+        "Ticker", "Date", "Open", "High", "Low", "Close", "Volume",
+        "Market_Cap", "PE_Ratio", "PB_Ratio", "Dividend_Yield", "EPS",
+        "52_Week_High", "52_Week_Low"
+    ]
+    dataframe = dataframe[expected_columns]
+
+    # 🔹 Date 컬럼을 YYYY-MM-DD 포맷으로 변환
+    dataframe["Date"] = pd.to_datetime(dataframe["Date"]).dt.strftime('%Y-%m-%d')
+
+
     # DataFrame을 CSV 포맷으로 메모리에 저장한 후 업로드
     csv_buffer = StringIO()
     dataframe.to_csv(csv_buffer, index=False)

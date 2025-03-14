@@ -54,7 +54,7 @@ services:
     volumes:
       - ./keys:/opt/keys
 
-  bigquery-optimizer:
+  bigquery:
     build:
       context: .
       dockerfile: Dockerfile.bigquery
@@ -64,4 +64,4 @@ services:
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/gcs-key.json
     working_dir: /opt/bigquery
-    command: python3 bigquery_optimization.py
+    command: ["python", "data_mart_creation.py"]
