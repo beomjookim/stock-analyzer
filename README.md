@@ -108,7 +108,7 @@ https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
  
  ---
  
- ## 📣 추후 최적화 계획
+ ## 📣 추가 최적화 계획 [~3/31]
  
  📝 **Apache Spark 최적화**
  
