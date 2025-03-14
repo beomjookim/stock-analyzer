@@ -75,7 +75,7 @@ def fetch_stock_data(tickers, period="1y"):
 
 if __name__ == "__main__":
 
-    start_time = time.time()  # 시작 시간 기록
+    # start_time = time.time()  # 시작 시간 기록
 
     tickers = get_top_50_sp500_tickers()
     stock_df = fetch_stock_data(tickers, period="1y")
@@ -86,11 +86,11 @@ if __name__ == "__main__":
         BUCKET_NAME = os.getenv("BUCKET_NAME")  # 환경 변수에서 가져오기
         GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
 
-        # ✅ 원본 데이터만 GCS에 저장
+        # 원본 데이터만 GCS에 저장
         upload_to_gcs(BUCKET_NAME, GCS_PATH, stock_df)
     else:
         print("⚠ No data fetched. Check API availability.")
 
-    end_time = time.time()  # 종료 시간 기록
-    execution_time = end_time - start_time  # 실행 시간 계산
-    print(f"⏱ Execution Time: {execution_time:.4f} seconds")
+    # end_time = time.time()  # 종료 시간 기록
+    # execution_time = end_time - start_time  # 실행 시간 계산
+    # print(f"⏱ Execution Time: {execution_time:.4f} seconds")
