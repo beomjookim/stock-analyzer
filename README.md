@@ -67,7 +67,7 @@
  ## 💎 2. 데이터 파이프라인 흐름
 
  
- ### **🔍 (1) 데이터 수집 (Extract)** - Bronze Layer
+ ### **🔍 (1) 데이터 수집 (Extract)** -> Bronze Layer
  
  1️⃣ **오늘자 S&P 500 상위 50개 종목 리스트업** (`fetch_tickers.py`)  
  2️⃣ **Yahoo Finance에서 주가 데이터 수집** (`fetch_stock_data.py`)  
@@ -75,7 +75,7 @@
  
  ---
  
- ### **🔍 (2) 데이터 변환 (Transform)**
+ ### **🔍 (2) 데이터 변환 (Transform)** -> Silver Layer
  
  🔥 **Apache Spark를 활용하여 데이터 정제 및 변환**  
  1️⃣ 결측치 및 이상치 처리 (`augment_data.py`)  
@@ -84,7 +84,7 @@
  
  ---
  
- ### **🔍 (3) 데이터 웨어하우스 (DWH) 구축**
+ ### **🔍 (3) 데이터 웨어하우스 (DWH) 구축** -> Gold Layer
  
  🔥 **BigQuery를 활용하여 Data Mart 설계 및 적재**  
  1️⃣ `fact_stock_prices.sql` → **주가 데이터 테이블**  
@@ -111,10 +111,10 @@
 https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
 
 ![image](https://github.com/user-attachments/assets/7e701263-a9f3-4b89-aadb-85da7ebc5717)  
- 기본적으로는, 상위 50개 종목 전반을 다루는 차트가 디스플레이 됩니다.
+ 기본적으로는, 상위 50개 종목 전반을 다루는 차트가 디스플레이 됩니다.  
  좌상단부터 시계방향으로, 주가 트렌드, PER vs. PBR 산점도, 시가총액 트리맵, 변동성 차트입니다.
 
- 가운데의 드랍다운으로 특정 종목들을 지정하면, 해당 종목들만 필터링하여 위의 차트들이 업데이트됩니다.
+ 가운데의 드랍다운으로 특정 종목들을 지정하면, 해당 종목들만 필터링하여 위의 차트들이 업데이트됩니다.  
  예를 들어, PLTR, TSLA, NVDA, AMAZN, AAPL의 5개 종목을 선정하면 아래와 같이 표현됩니다.
 ![image](https://github.com/user-attachments/assets/4dd0744e-58b3-49a7-b272-0001f830710a)
 
@@ -126,18 +126,18 @@ https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
 
 1️⃣ 데이터 로드 최적화 (Data Ingestion Optimization)  
 ✅ 병렬 API 호출 (ThreadPoolExecutor)  
-Yahoo Finance API를 활용하여 데이터를 가져오는 과정에서, 멀티스레딩을 사용하여 병렬로 데이터를 수집하도록 최적화.   
+YFinance API를 활용하여 데이터를 가져오는 과정에서, 멀티스레딩을 사용하여 병렬로 데이터를 수집하도록 최적화.   
 ThreadPoolExecutor(max_workers=10)을 사용하여 최대 10개의 요청을 동시에 수행.      
 👉 결과: 네트워크 대기 시간을 줄여 **데이터 수집 속도 54.7584s -> 14.4796s 으로 73.5% 단축**.  
 
 2️⃣ 데이터 변환 최적화 (Data Transformation Optimization)  
 ✅ Spark에서 컬럼 타입 변환 시 Null 값 보정  
 원본 데이터의 NULL 값을 처리하지 않으면 Spark와 BigQuery에서 Type Mismatch 에러 발생 가능.  
-when(col("<column>").isNull(), <default_value>).otherwise(col("<column>")) 구문을 사용하여 NULL 값을 적절한 기본값으로 변환.  
+조건절 구문을 사용하여 NULL 값을 적절한 기본값으로 변환.  
 👉 결과: **데이터 정합성 유지 + BigQuery 적재 오류 감소**  
 
 ✅ Spark Window Function 활용  
-이동평균(Moving_Avg_5, Moving_Avg_20 등), 변동성(Volatility_30d), RSI 등 여러 기술적 지표 계산 시, Spark Window Function을 사용하여 성능을 최적화.  
+이평선, RSI 등 여러 기술적 지표 계산 시, Spark Window Function을 사용하여 성능을 최적화.  
 👉 결과: **GroupBy보다 2배 이상 빠른 연산 수행**, 데이터 가공 속도 개선.  
 
 ✅ 불필요한 컬럼 제거  
@@ -167,6 +167,7 @@ Silver 단계에서 데이터 정제 및 파생 변수 생성, Gold 단계에서
 
  
  📝 **Apache Airflow로 Batch 업무 자동화**  
+ 
  📝 **Github action으로 CI/CD 자동화**
  
 
