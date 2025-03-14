@@ -47,9 +47,9 @@
  │ │ │ ├── fetch_stock_data.py&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # yFinance에서 지난 1년치 주가 데이터 추출 및 GCS에 raw 데이터 적재<br>
  │ ├── 📂 data_processing/&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # (2) 데이터 가공 (Transform) & (3) 데이터 적재 (Load)<br>
  │ │ ├── short_term/<br>
- │ │ │ ├── augment_data.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 데이터 정제 및 변환 & BigQuery에 parquet 파일 적재<br>
+ │ │ │ ├── augment_data.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 데이터 정제 및 변환 & BigQuery에 parquet 파일 적재<br>
  │ ├── 📂 bigquery/<br>
- │ │ ├── data_mart_creation.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 데이터 마트 구현 및 Partitioning & Clustering 최적화<br>
+ │ │ ├── data_mart_creation.py &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;# 데이터 마트 구현 및 Partitioning & Clustering 최적화<br>
  │ │ ├── fact_stock_prices.sql&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 데이터 마트 1<br>
  │ │ ├── fact_fundamental_metrics.sql &nbsp;&nbsp;&nbsp;# 데이터 마트 2<br>
  │ │ ├── fact_technical_indicators.sql&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; # 데이터 마트 3<br>
