@@ -18,8 +18,8 @@
  
  - **자동화 오케스트레이션**: Apache Airflow
  
- <여기에 draw.io ㄱㄱㄱ>
- 
+![diagram](https://github.com/user-attachments/assets/ca5862ba-db08-472d-8a0a-18750e5a269d)
+
  ---
  
  ## 🚀 1. 프로젝트 구조
