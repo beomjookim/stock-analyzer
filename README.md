@@ -121,7 +121,7 @@ https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
  
  ---
 
- ## 💎 적용한 최적화 경과 리스트
+## 💎 적용한 최적화 경과 리스트
 
 
 ###1️⃣ 데이터 로드 최적화 (Data Ingestion Optimization)  
