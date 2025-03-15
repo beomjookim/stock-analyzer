@@ -29,8 +29,7 @@
 
 
 ### 초기 버전(최적화 이전)
-<img src = "https://github.com/user-attachments/assets/ca5862ba-db08-472d-8a0a-18750e5a269d" height="500">
-
+<img src = "https://github.com/user-attachments/assets/eda4b559-d291-493a-b365-0406031fa389" height="500">
 
  ---
 
