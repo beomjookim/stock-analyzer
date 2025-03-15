@@ -79,7 +79,7 @@
  
  🔥 **Apache Spark를 활용하여 데이터 정제 및 변환**  
  1️⃣ 결측치 및 이상치 처리 (`augment_data.py`)  
- 2️⃣ 이동평균(Moving Average), RSI(상대강도지수), 변동성(Volatility) 등 계산
+ 2️⃣ 이동평균(Moving Average), RSI(상대강도지수), 변동성(Volatility) 등 계산  
  3️⃣ parquet 형태로 변환 후 BigQuery에 적재
  
  ---
