@@ -21,7 +21,7 @@
  - **데이터 시각화**: Looker Studio
  - **개발 환경**: Docker, Visual Studio Code, Linux
  
- - **자동화 오케스트레이션**: Apache Airflow
+ - **자동화 오케스트레이션**: Apache Airflow - planned
 
 
 ### 최적화 적용 이후
