@@ -140,38 +140,53 @@ https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
 
 
 ### 1️⃣ 데이터 로드 최적화 (Data Ingestion Optimization)  
+
 #### ✅ 병렬 API 호출 (ThreadPoolExecutor)  
+
 YFinance API를 활용하여 데이터를 가져오는 과정에서, 멀티스레딩을 사용하여 병렬로 데이터를 수집하도록 최적화.   
 ThreadPoolExecutor(max_workers=10)을 사용하여 최대 10개의 요청을 동시에 수행.      
+
 👉 결과: 네트워크 대기 시간을 줄여 **데이터 수집 속도 54.7584s -> 14.4796s 으로 73.5% 단축**.  
 
 ### 2️⃣ 데이터 변환 최적화 (Data Transformation Optimization)  
+
 #### ✅ Spark에서 컬럼 타입 변환 시 Null 값 보정  
+
 원본 데이터의 NULL 값을 처리하지 않으면 Spark와 BigQuery에서 Type Mismatch 에러 발생 가능.  
 조건절 구문을 사용하여 NULL 값을 적절한 기본값으로 변환.  
+
 👉 결과: **데이터 정합성 유지 + BigQuery 적재 오류 감소**  
 
 #### ✅ Spark Window Function 활용  
+
 이평선, RSI 등 여러 기술적 지표 계산 시, Spark Window Function을 사용하여 성능을 최적화.  
+
 👉 결과: **GroupBy보다 2배 이상 빠른 연산 수행**, 데이터 가공 속도 개선.  
 
 #### ✅ 불필요한 컬럼 제거  
+
 stock.info에서 가져온 재무 지표 중 사용하지 않는 컬럼을 제거하여 메모리 사용량 절감.  
+
 👉 결과: 메모리 사용량 20% 감소, Spark 성능 향상.  
 
 ### 3️⃣ 데이터 적재 최적화 (Data Load Optimization)  
+
 #### ✅ Parquet 대신 CSV 사용  
+
 GCS에 데이터를 저장할 때, 원본 데이터는 CSV 형식으로 유지하여 호환성을 높이고 가독성을 유지.  
 하지만, BigQuery 적재 시에는 Parquet을 활용하는 것이 더 적절할 수 있음.  
 
 #### ✅ BigQuery 성능 최적화 - Partitioning & Clustering 적용  
+
 데이터 적재 후, BigQuery 테이블을 파티셔닝 및 클러스터링하여 조회 속도를 최적화함.  
 Partitioning	DATE(TIMESTAMP(Date)) 로 날짜별 파티셔닝 적용.  
 Clustering	Ticker 기준으로 클러스터링 적용	특정 주식 검색 시 I/O 비용 절감.  
 Column Pruning	SELECT 문에서 필요한 컬럼만 조회	쿼리 실행 속도 향상.  
+
 👉 결과: **Looker에서의 데이터 조회 성능 기존 5.8342s -> 2.3546s로 59.64% 단축**.  
 
 ### 4️⃣ 메달리온 아키텍처 적용 (Bronze → Silver → Gold 계층화)  
+
 데이터 처리 파이프라인을 Bronze → Silver → Gold 로 계층 분리.  
 모듈화된 코드 구조로 유지보수성과 확장성을 강화.  
 Silver 단계에서 데이터 정제 및 파생 변수 생성, Gold 단계에서 최적화된 분석 데이터 제공.  
