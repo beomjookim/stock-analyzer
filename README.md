@@ -148,6 +148,7 @@ ThreadPoolExecutor(max_workers=10)을 사용하여 최대 10개의 요청을 동
 
 👉 결과: 네트워크 대기 시간을 줄여 **데이터 수집 속도 54.7584s -> 14.4796s 으로 73.5% 단축**.  
 
+
 ### 2️⃣ 데이터 변환 최적화 (Data Transformation Optimization)  
 
 #### ✅ Spark에서 컬럼 타입 변환 시 Null 값 보정  
@@ -157,11 +158,13 @@ ThreadPoolExecutor(max_workers=10)을 사용하여 최대 10개의 요청을 동
 
 👉 결과: **데이터 정합성 유지 + BigQuery 적재 오류 감소**  
 
+
 #### ✅ Spark Window Function 활용  
 
 이평선, RSI 등 여러 기술적 지표 계산 시, Spark Window Function을 사용하여 성능을 최적화.  
 
 👉 결과: **GroupBy보다 2배 이상 빠른 연산 수행**, 데이터 가공 속도 개선.  
+
 
 #### ✅ 불필요한 컬럼 제거  
 
@@ -169,12 +172,14 @@ stock.info에서 가져온 재무 지표 중 사용하지 않는 컬럼을 제�
 
 👉 결과: 메모리 사용량 20% 감소, Spark 성능 향상.  
 
+
 ### 3️⃣ 데이터 적재 최적화 (Data Load Optimization)  
 
 #### ✅ Parquet 대신 CSV 사용  
 
 GCS에 데이터를 저장할 때, 원본 데이터는 CSV 형식으로 유지하여 호환성을 높이고 가독성을 유지.  
 하지만, BigQuery 적재 시에는 Parquet을 활용하는 것이 더 적절할 수 있음.  
+
 
 #### ✅ BigQuery 성능 최적화 - Partitioning & Clustering 적용  
 
@@ -184,6 +189,7 @@ Clustering	Ticker 기준으로 클러스터링 적용	특정 주식 검색 시 I
 Column Pruning	SELECT 문에서 필요한 컬럼만 조회	쿼리 실행 속도 향상.  
 
 👉 결과: **Looker에서의 데이터 조회 성능 기존 5.8342s -> 2.3546s로 59.64% 단축**.  
+
 
 ### 4️⃣ 메달리온 아키텍처 적용 (Bronze → Silver → Gold 계층화)  
 
