@@ -122,11 +122,13 @@ https://lookerstudio.google.com/reporting/98c57f71-3abb-4be9-8472-c5b40505f3a9
 <p align="center">
  <img src = "https://github.com/user-attachments/assets/ff9000b2-bdac-4b2e-9af4-ceee1b13576b" height="480">
 </p>
- 기본적으로는, 상위 50개 종목 전반을 다루는 차트가 디스플레이 됩니다.  
- 좌상단부터 시계방향으로, 주가 트렌드, PER vs. PBR 산점도, 시가총액 트리맵, 변동성 차트입니다.
 
- 가운데의 드랍다운으로 특정 종목들을 지정하면, 해당 종목들만 필터링하여 위의 차트들이 업데이트됩니다.  
- 예를 들어, PLTR, TSLA, NVDA, AMAZN, AAPL의 5개 종목을 선정하면 아래와 같이 표현됩니다.
+기본적으로는, 상위 50개 종목 전반을 다루는 차트가 디스플레이 됩니다.  
+좌상단부터 시계방향으로, 주가 트렌드, PER vs. PBR 산점도, 시가총액 트리맵, 변동성 차트입니다.  
+
+가운데의 드랍다운으로 특정 종목들을 지정하면, 해당 종목들만 필터링하여 위의 차트들이 업데이트됩니다.  
+예를 들어, PLTR, TSLA, NVDA, AMAZN, AAPL의 5개 종목을 선정하면 아래와 같이 표현됩니다.  
+
 <p align="center">
  <img src = "https://github.com/user-attachments/assets/3c175406-1c2b-463b-ba03-97368041160c" height="480">
 </p>
