@@ -46,29 +46,29 @@
  ## 💎 1. 프로젝트 구조
 
  ```bash 
- ├── docker-compose.yml                                           # docker 전반 환경 설정
- ├── Dockerfile.spark                                             # spark 관련 도커 환경 구축
- ├── Dockerfile.bigquery                                          # bigquery 관련 도커 환경 구축
+ ├── docker-compose.yml                                         # docker 전반 환경 설정
+ ├── Dockerfile.spark                                           # spark 관련 도커 환경 구축
+ ├── Dockerfile.bigquery                                        # bigquery 관련 도커 환경 구축
  ├── 📂 src/
-     ├── 📂 data_fetching/                                       # (1) 데이터 수집 (Extract)
+     ├── 📂 data_fetching/                                     # (1) 데이터 수집 (Extract)
      │   ├── short_term/
-     │   │   ├── fetch_tickers.py                                 # S&P 500 상위 50개 종목 선정 - 웹 크롤링
-     │   │   └── fetch_stock_data.py                              # yFinance에서 지난 1년치 주가 데이터 추출 및 GCS에 raw 데이터 적재
-     ├── 📂 data_processing/                                     # (2) 데이터 가공 (Transform) & (3) 데이터 적재 (Load)
+     │   │   ├── fetch_tickers.py                               # S&P 500 상위 50개 종목 선정 - 웹 크롤링
+     │   │   └── fetch_stock_data.py                            # yFinance에서 지난 1년치 주가 데이터 추출 및 GCS에 raw 데이터 적재
+     ├── 📂 data_processing/                                   # (2) 데이터 가공 (Transform) & (3) 데이터 적재 (Load)
      │   ├── short_term/
-     │   │   └── augment_data.py                                  # 데이터 정제 및 변환 & BigQuery에 parquet 파일 적재
+     │   │   └── augment_data.py                                # 데이터 정제 및 변환 & BigQuery에 parquet 파일 적재
      ├── 📂 bigquery/
-     │   ├── data_mart_creation.py                                # 데이터 마트 구현 및 Partitioning & Clustering 최적화
-     │   ├── fact_stock_prices.sql                                # 데이터 마트 1
-     │   ├── fact_fundamental_metrics.sql                         # 데이터 마트 2
-     │   ├── fact_technical_indicators.sql                        # 데이터 마트 3
+     │   ├── data_mart_creation.py                              # 데이터 마트 구현 및 Partitioning & Clustering 최적화
+     │   ├── fact_stock_prices.sql                              # 데이터 마트 1
+     │   ├── fact_fundamental_metrics.sql                       # 데이터 마트 2
+     │   ├── fact_technical_indicators.sql                      # 데이터 마트 3
      ├── 📂 GCS/
      │   ├── 📂 short-term/collected
      │   │   └── 📂 sp500_raw_data.csv
      │   ├── 📂 temp-load
-     ├── 📂 visualization/                                        # (4) 데이터 시각화
-     │   └── looker_dashboard.json                                # Looker Studio 대시보드 설정
-     └── README.md                                                # 프로젝트 설명
+     ├── 📂 visualization/                                      # (4) 데이터 시각화
+     │   └── looker_dashboard.json                              # Looker Studio 대시보드 설정
+     └── README.md                                              # 프로젝트 설명
 ```
  
  ---
