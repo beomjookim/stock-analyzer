@@ -29,7 +29,7 @@
 
 
 ### 초기 버전(최적화 이전)
-<img src = "https://github.com/user-attachments/assets/eda4b559-d291-493a-b365-0406031fa389" height="500">
+<img src = "https://github.com/user-attachments/assets/eda4b559-d291-493a-b365-0406031fa389" height="480">
 
  ---
 
