@@ -15,7 +15,7 @@
 
  스키마가 있는 데이터 웨어하우스이지만 최적화 과정에서 자연스레 **메달리온 모델**을 채택하게 되었습니다.
  
- - **데이터 원천**: Yahoo Finance (yFinance API), 웹 크롤링
+ - **데이터 원천**: 웹 크롤링, Yahoo Finance (yFinance API)
  - **ETL 기술 스택** Python, Apache Spark, Google Cloud Storage (GCS)
  - **DWH & Data Mart**: Google BigQuery
  - **데이터 시각화**: Looker Studio
