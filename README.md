@@ -25,10 +25,9 @@
 
 
 ### 최적화 적용 이후
-★★★★★★★★★★★★★★★★★★★★★★★★★★★★ - 0315 수정
-
+![image](https://github.com/user-attachments/assets/57736086-2b86-405c-999e-c70a7704c633)
  
-### 베타 버전(최적화 이전)
+### 초기 버전(최적화 이전)
 ![diagram](https://github.com/user-attachments/assets/ca5862ba-db08-472d-8a0a-18750e5a269d)
 
  ---
