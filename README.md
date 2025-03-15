@@ -27,9 +27,12 @@
 ### 최적화 적용 이후
 <img src = "https://github.com/user-attachments/assets/57736086-2b86-405c-999e-c70a7704c633" height="500">
 
+<details>
+<summary>초기 버전(최적화 이전)</summary>
 
 ### 초기 버전(최적화 이전)
 <img src = "https://github.com/user-attachments/assets/eda4b559-d291-493a-b365-0406031fa389" height="480">
+</details>
 
  ---
 
