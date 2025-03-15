@@ -25,11 +25,11 @@
 
 
 ### 최적화 적용 이후
-<img src = "https://github.com/user-attachments/assets/57736086-2b86-405c-999e-c70a7704c633" width="100" height="100">
+<img src = "https://github.com/user-attachments/assets/57736086-2b86-405c-999e-c70a7704c633" height="500">
 
 
 ### 초기 버전(최적화 이전)
-<img src = "https://github.com/user-attachments/assets/ca5862ba-db08-472d-8a0a-18750e5a269d" width="100" height="100">
+<img src = "https://github.com/user-attachments/assets/ca5862ba-db08-472d-8a0a-18750e5a269d" height="500">
 
 
  ---
