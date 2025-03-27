@@ -271,7 +271,8 @@ Silver 단계에서 데이터 정제 및 파생 변수 생성, Gold 단계에서
 
  
  ### 📝 ~~**Apache Airflow로 Batch 업무 자동화**~~  
- 
+ ### 📝 **materialized view로 캐싱하기**
+ ### 📝 **GCP에 운영환경 구축**
  ### 📝 **Github action으로 CI/CD 자동화**
  
 
