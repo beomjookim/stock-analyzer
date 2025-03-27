@@ -67,6 +67,10 @@
  ├── docker-compose.yml                                         # docker 전반 환경 설정
  ├── Dockerfile.spark                                           # spark 관련 도커 환경 구축
  ├── Dockerfile.bigquery                                        # bigquery 관련 도커 환경 구축
+ ├── 📂 airflow/                                                 # (NEW) Airflow 관련 구성
+ │   ├── dags/
+ │   │   └── stock_pipeline_dag.py                              # 전체 데이터 파이프라인 DAG 정의 (fetch → transform → load)
+ │   ├── logs/                                                  # Airflow 실행 로그 (Docker에서 자동 생성  
  ├── 📂 src/
      ├── 📂 data_fetching/                                     # (1) 데이터 수집 (Extract)
      │   ├── short_term/
