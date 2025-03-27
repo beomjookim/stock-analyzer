@@ -270,7 +270,7 @@ Silver 단계에서 데이터 정제 및 파생 변수 생성, Gold 단계에서
  ## 📣 추후 파이프라인 업그레이드 계획
 
  
- ~~### 📝 **Apache Airflow로 Batch 업무 자동화**~~  
+ ### 📝 ~~**Apache Airflow로 Batch 업무 자동화**~~  
  
  ### 📝 **Github action으로 CI/CD 자동화**
  
