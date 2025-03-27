@@ -1,21 +1,64 @@
 services:
-  # airflow:
-  #   image: apache/airflow:2.6.1
-  #   container_name: airflow
-  #   restart: always
-  #   env_file:
-  #     - .env
-  #   environment:
-  #     - LOAD_EX=n
-  #     - AIRFLOW__CORE__EXECUTOR=LocalExecutor
-  #     - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
-  #   ports:
-  #     - "8080:8080"
-  #   volumes:
-  #     - ./airflow/dags:/opt/airflow/dags
-  #     - ./airflow/logs:/opt/airflow/logs
-  #     - ./airflow/plugins:/opt/airflow/plugins
-  #     - ./keys:/opt/keys
+  airflow:
+    build:
+      context: .
+      dockerfile: Dockerfile.airflow
+    depends_on:
+      - postgres
+    image: apache/airflow:2.6.1
+    container_name: airflow
+    restart: always
+    env_file:
+      - .env
+    environment:
+      - LOAD_EX=n
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./airflow/docker-entrypoint.sh:/entrypoint.sh
+      - ./keys:/opt/keys
+      - ./src:/opt/src
+      - /var/run/docker.sock:/var/run/docker.sock # ✅ docker exec 사용을 위한 볼륨
+    command: bash /entrypoint.sh
+
+  airflow-scheduler:
+    image: apache/airflow:2.6.1
+    container_name: airflow-scheduler
+    restart: always
+    depends_on:
+      - postgres
+    env_file:
+      - .env
+    environment:
+      - AIRFLOW__CORE__EXECUTOR=LocalExecutor
+      - AIRFLOW__DATABASE__SQL_ALCHEMY_CONN=postgresql+psycopg2://airflow:airflow@postgres/airflow
+      - GOOGLE_APPLICATION_CREDENTIALS=${GOOGLE_APPLICATION_CREDENTIALS}
+    volumes:
+      - ./airflow/dags:/opt/airflow/dags
+      - ./airflow/logs:/opt/airflow/logs
+      - ./airflow/plugins:/opt/airflow/plugins
+      - ./keys:/opt/keys
+      - ./src:/opt/src
+      - /var/run/docker.sock:/var/run/docker.sock # ✅ docker exec 사용을 위한 볼륨
+    command: bash -c "airflow scheduler"
+
+  postgres:
+    image: postgres:13
+    restart: always
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-db-volume:/var/lib/postgresql/data
 
   spark-master:
     build:
@@ -58,10 +101,14 @@ services:
     build:
       context: .
       dockerfile: Dockerfile.bigquery
+    container_name: bigquery
     volumes:
       - ./src/bigquery:/opt/bigquery
       - ./keys/gcs-key.json:/opt/keys/gcs-key.json
     environment:
       - GOOGLE_APPLICATION_CREDENTIALS=/opt/keys/gcs-key.json
     working_dir: /opt/bigquery
-    command: ["python", "data_mart_creation.py"]
+    command: tail -f /dev/null
+
+volumes:
+  postgres-db-volume:

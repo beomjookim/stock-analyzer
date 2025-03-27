@@ -14,6 +14,3 @@ COPY ./keys/gcs-key.json /opt/keys/gcs-key.json
 
 # 환경 변수 설정
 ENV GOOGLE_APPLICATION_CREDENTIALS="/opt/keys/gcs-key.json"
-
-# 실행할 Python 스크립트 지정 (예: `data_mart_creation.py`)
-CMD ["python", "/opt/bigquery/data_mart_creation.py"]

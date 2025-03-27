@@ -1,0 +1,31 @@
+FROM apache/airflow:2.6.1-python3.8
+
+USER root
+
+# 필요한 시스템 패키지 설치
+RUN apt-get update && apt-get install -y \
+    curl \
+    apt-transport-https \
+    ca-certificates \
+    gnupg \
+    docker.io \
+    && apt-get clean
+
+# airflow 유저를 docker 그룹에 추가 (docker exec 허용용)
+RUN usermod -aG docker airflow
+
+USER airflow
+
+# 필요한 파이썬 패키지 설치
+RUN pip install --no-cache-dir \
+    google-cloud-storage \
+    google-cloud-bigquery \
+    yfinance==0.2.52 \
+    pandas \
+    requests \
+    beautifulsoup4
+
+# GCP 인증 환경 변수 설정
+ENV GOOGLE_APPLICATION_CREDENTIALS="/opt/keys/gcs-key.json"
+
+WORKDIR /opt/airflow

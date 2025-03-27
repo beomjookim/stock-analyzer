@@ -1,12 +1,11 @@
 from concurrent.futures import ThreadPoolExecutor
 from google.cloud import storage
-import yfinance as yf
 import pandas as pd
 import os
 import datetime
 from fetch_tickers import get_top_50_sp500_tickers
 from io import StringIO
-import time
+import yfinance as yf
 
 # GCS 업로드 함수
 def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
