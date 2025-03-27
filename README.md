@@ -67,11 +67,11 @@
  ├── docker-compose.yml                                         # docker 전반 환경 설정
  ├── Dockerfile.spark                                           # spark 관련 도커 환경 구축
  ├── Dockerfile.bigquery                                        # bigquery 관련 도커 환경 구축
- ├── 📂 airflow/                                                 # (NEW) Airflow 관련 구성
+ ├── 📂 airflow/                                                # Airflow 관련 구성
  │   ├── dags/
  │   │   └── stock_pipeline_dag.py                              # 전체 데이터 파이프라인 DAG 정의 (fetch → transform → load)
  │   ├── logs/                                                  # Airflow 실행 로그 (Docker에서 자동 생성  
- ├── 📂 src/
+ └── 📂 src/
      ├── 📂 data_fetching/                                     # (1) 데이터 수집 (Extract)
      │   ├── short_term/
      │   │   ├── fetch_tickers.py                               # S&P 500 상위 50개 종목 선정 - 웹 크롤링
@@ -90,7 +90,7 @@
      │   ├── 📂 temp-load
      ├── 📂 visualization/                                      # (4) 데이터 시각화
      │   └── looker_dashboard.json                              # Looker Studio 대시보드 설정
-     └── README.md                                              # 프로젝트 설명
+     ── README.md                                              # 프로젝트 설명
 ```
  
  <br/>
