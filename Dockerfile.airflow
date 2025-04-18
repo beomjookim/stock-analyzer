@@ -11,7 +11,7 @@ RUN apt-get update && apt-get install -y \
     docker.io \
     && apt-get clean
 
-# airflow 유저를 docker 그룹에 추가 (docker exec 허용용)
+# airflow 유저를 docker 그룹에 추가 (docker exec 허용)
 RUN usermod -aG docker airflow
 
 USER airflow
