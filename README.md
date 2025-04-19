@@ -246,6 +246,12 @@ GCS에 데이터를 저장할 때, 원본 데이터는 CSV 형식으로 유지�
  <br/>
 
 
+#### ✅ CSV 대신 Parquet 사용
+
+위와 같이 CSV를 썼을 때는 가독성이 높아진다는 장점은 있었으나, 이후 Spark 및 BigQuery에서의 운영과  
+실무에서의 환경을 고려했을 때, 확장성을 높이기 위해 Parquet가 더 적합하다고 판단하여 다시 Parquet로 저장.
+
+
 #### ✅ BigQuery 성능 최적화 - Partitioning & Clustering 적용  
 
 데이터 적재 후, BigQuery 테이블을 파티셔닝 및 클러스터링하여 조회 속도를 최적화함.  
