@@ -1,4 +1,4 @@
-# 📊 S&P 500 Stock year-long analyzer
+![image](https://github.com/user-attachments/assets/bc109bb1-1c3a-474a-b7cd-8d5a0b98ddc1)# 📊 S&P 500 Stock year-long analyzer
 
 
  <br/>
@@ -272,6 +272,7 @@ Silver 단계에서 데이터 정제 및 파생 변수 생성, Gold 단계에서
  
  ### 📝 ~~**Apache Airflow로 Batch 업무 자동화**~~  
  ### 📝 **데이터 원본 csv 아닌 parquet로 저장하도록 수정**
+ ### 📝 **데이터 원본 csv 저장 경로 수정으로 저장 효율화**
  ### 📝 **materialized view로 캐싱하기**
  ### 📝 **GCP에 운영환경 구축**
  ### 📝 **Github action으로 CI/CD 자동화**
