@@ -238,7 +238,7 @@ stock.info에서 가져온 재무 지표 중 사용하지 않는 컬럼을 제�
 
 ### 3️⃣ 데이터 적재 최적화 (Data Load Optimization)  
 
-~~#### ✅ Parquet 대신 CSV 사용~~  
+#### ~~✅ Parquet 대신 CSV 사용~~  
 
 ~~GCS에 데이터를 저장할 때, 원본 데이터는 CSV 형식으로 유지하여 호환성을 높이고 가독성을 유지.  
 하지만, BigQuery 적재 시에는 Parquet을 활용하는 것이 더 적절할 수 있음.~~  
