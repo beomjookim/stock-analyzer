@@ -42,7 +42,8 @@ RUN pip3 install --no-cache-dir \
     pandas \
     requests \
     beautifulsoup4 \
-    pyspark
+    pyspark \
+    pyarrow
 
 # Spark 환경 설정 (GCS & BigQuery 연동)
 ENV SPARK_CLASSPATH="/opt/spark/jars/gcs-connector-hadoop3-2.2.5.jar:/opt/spark/jars/hadoop-aws-3.2.0.jar:/opt/spark/jars/aws-java-sdk-bundle-1.11.375.jar:/opt/spark/jars/spark-bigquery-with-dependencies_2.12-0.29.0.jar"

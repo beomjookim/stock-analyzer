@@ -15,26 +15,26 @@ today = datetime.datetime.today().strftime('%Y%m%d')
 
 # GCS 설정
 GCS_BUCKET = "short-term"
-BRONZE_PATH = f"gs://{GCS_BUCKET}/collected/sp500_top50_{today}.csv"
+BRONZE_PATH = f"gs://{GCS_BUCKET}/collected/sp500_top50_{today}.parquet"
 BQ_DATASET = "short_term"
 BQ_TABLE_SILVER = "fact_stock_prices_silver"
 
 # Bronze 데이터 로드
-df = spark.read.option("header", True).csv(BRONZE_PATH)
+df = spark.read.parquet(BRONZE_PATH)
 
-# 데이터 타입 변환 (STRING → FLOAT, INT)
-df = df.withColumn("Open", col("Open").cast("FLOAT")) \
-       .withColumn("High", col("High").cast("FLOAT")) \
-       .withColumn("Low", col("Low").cast("FLOAT")) \
-       .withColumn("Close", col("Close").cast("FLOAT")) \
-       .withColumn("Volume", col("Volume").cast("INT")) \
-       .withColumn("Market_Cap", col("Market_Cap").cast("FLOAT")) \
-       .withColumn("PE_Ratio", col("PE_Ratio").cast("FLOAT")) \
-       .withColumn("PB_Ratio", col("PB_Ratio").cast("FLOAT")) \
-       .withColumn("Dividend_Yield", col("Dividend_Yield").cast("FLOAT")) \
-       .withColumn("EPS", col("EPS").cast("FLOAT")) \
-       .withColumn("52_Week_High", col("52_Week_High").cast("FLOAT")) \
-       .withColumn("52_Week_Low", col("52_Week_Low").cast("FLOAT"))
+# # 데이터 타입 변환 (STRING → FLOAT, INT)
+# df = df.withColumn("Open", col("Open").cast("FLOAT")) \
+#        .withColumn("High", col("High").cast("FLOAT")) \
+#        .withColumn("Low", col("Low").cast("FLOAT")) \
+#        .withColumn("Close", col("Close").cast("FLOAT")) \
+#        .withColumn("Volume", col("Volume").cast("INT")) \
+#        .withColumn("Market_Cap", col("Market_Cap").cast("FLOAT")) \
+#        .withColumn("PE_Ratio", col("PE_Ratio").cast("FLOAT")) \
+#        .withColumn("PB_Ratio", col("PB_Ratio").cast("FLOAT")) \
+#        .withColumn("Dividend_Yield", col("Dividend_Yield").cast("FLOAT")) \
+#        .withColumn("EPS", col("EPS").cast("FLOAT")) \
+#        .withColumn("52_Week_High", col("52_Week_High").cast("FLOAT")) \
+#        .withColumn("52_Week_Low", col("52_Week_Low").cast("FLOAT"))
 
 # NULL 값 처리 (보정)
 df = df.withColumn("Market_Cap", when(col("Market_Cap").isNull(), 0).otherwise(col("Market_Cap"))) \
@@ -68,6 +68,27 @@ df = df.withColumn("Price_Change", col("Close") - lag("Close", 1).over(window_14
        .withColumn("RSI_14", 100 - (100 / (1 + col("RS")))) \
        .drop("Price_Change", "Gain", "Loss", "Avg_Gain", "Avg_Loss", "RS")
 
+df = df.withColumn("Ticker", col("Ticker").cast("STRING")) \
+       .withColumn("Date", col("Date").cast("STRING")) \
+       .withColumn("Open", col("Open").cast("DOUBLE")) \
+       .withColumn("High", col("High").cast("DOUBLE")) \
+       .withColumn("Low", col("Low").cast("DOUBLE")) \
+       .withColumn("Close", col("Close").cast("DOUBLE")) \
+       .withColumn("Volume", col("Volume").cast("INT")) \
+       .withColumn("Market_Cap", col("Market_Cap").cast("DOUBLE")) \
+       .withColumn("PE_Ratio", col("PE_Ratio").cast("DOUBLE")) \
+       .withColumn("PB_Ratio", col("PB_Ratio").cast("DOUBLE")) \
+       .withColumn("Dividend_Yield", col("Dividend_Yield").cast("DOUBLE")) \
+       .withColumn("EPS", col("EPS").cast("DOUBLE")) \
+       .withColumn("52_Week_High", col("52_Week_High").cast("DOUBLE")) \
+       .withColumn("52_Week_Low", col("52_Week_Low").cast("DOUBLE")) \
+       .withColumn("Moving_Avg_5", col("Moving_Avg_5").cast("DOUBLE")) \
+       .withColumn("Moving_Avg_20", col("Moving_Avg_20").cast("DOUBLE")) \
+       .withColumn("Moving_Avg_50", col("Moving_Avg_50").cast("DOUBLE")) \
+       .withColumn("Volatility_30d", col("Volatility_30d").cast("DOUBLE")) \
+       .withColumn("RSI_14", col("RSI_14").cast("DOUBLE"))
+# BigQuery 호환을 위한 데이터 변환
+
 # 컬럼 순서 강제 정렬 (BigQuery 에러 방지)
 expected_columns = [
     "Ticker", "Date", "Open", "High", "Low", "Close", "Volume",
@@ -75,6 +96,7 @@ expected_columns = [
     "52_Week_High", "52_Week_Low", "Moving_Avg_5", "Moving_Avg_20",
     "Moving_Avg_50", "Volatility_30d", "RSI_14"
 ]
+
 df = df.select(*expected_columns)
 
 # BigQuery에 Silver 데이터 저장
@@ -84,7 +106,7 @@ df.write.format("bigquery") \
     .mode("overwrite") \
     .save()
 
-print(f"Silver Data loaded into BigQuery with fixed column order: {BQ_DATASET}.{BQ_TABLE_SILVER}")
+print(f"Silver Data loaded into BigQuery: {BQ_DATASET}.{BQ_TABLE_SILVER}")
 
 # Spark 세션 종료
 spark.stop()

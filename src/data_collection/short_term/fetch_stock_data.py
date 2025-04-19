@@ -4,17 +4,16 @@ import pandas as pd
 import os
 import datetime
 from fetch_tickers import get_top_50_sp500_tickers
-from io import StringIO
+from io import  BytesIO
 import yfinance as yf
 
 # GCS 업로드 함수
 def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
-    """Uploads a Pandas DataFrame to Google Cloud Storage directly from memory."""
+    """Uploads a Pandas DataFrame to Google Cloud Storage as a Parquet file."""
     storage_client = storage.Client()
     bucket = storage_client.bucket(bucket_name)
     blob = bucket.blob(destination_blob_name)
 
-    # 🔹 컬럼 순서 강제 정렬
     expected_columns = [
         "Ticker", "Date", "Open", "High", "Low", "Close", "Volume",
         "Market_Cap", "PE_Ratio", "PB_Ratio", "Dividend_Yield", "EPS",
@@ -22,16 +21,15 @@ def upload_to_gcs(bucket_name, destination_blob_name, dataframe):
     ]
     dataframe = dataframe[expected_columns]
 
-    # 🔹 Date 컬럼을 YYYY-MM-DD 포맷으로 변환
-    dataframe["Date"] = pd.to_datetime(dataframe["Date"]).dt.strftime('%Y-%m-%d')
+    # csv가 아닌 parquet 저장
+    parquet_buffer = BytesIO()
+    dataframe.to_parquet(parquet_buffer, index=False, engine="pyarrow", coerce_timestamps="ms", allow_truncated_timestamps=True)
+    parquet_buffer.seek(0)
 
+    # GCS에 업로드
+    blob.upload_from_file(parquet_buffer, content_type="application/octet-stream")
 
-    # DataFrame을 CSV 포맷으로 메모리에 저장한 후 업로드
-    csv_buffer = StringIO()
-    dataframe.to_csv(csv_buffer, index=False)
-    blob.upload_from_string(csv_buffer.getvalue(), content_type="text/csv")
-
-    print(f"✅ Data successfully uploaded to gs://{bucket_name}/{destination_blob_name}")
+    print(f"Parquet file uploaded to gs://{bucket_name}/{destination_blob_name}")
 
 def fetch_single_stock(ticker, period="1y"):
     """Fetch stock data for a single ticker."""
@@ -60,7 +58,7 @@ def fetch_single_stock(ticker, period="1y"):
         return hist
 
     except Exception as e:
-        print(f"⚠ Error fetching data for {ticker}: {e}")
+        print(f"Error fetching data for {ticker}: {e}")
         return None
 
 def fetch_stock_data(tickers, period="1y"):
@@ -95,13 +93,13 @@ if __name__ == "__main__":
     if not stock_df.empty:
         # GCS 저장 경로 설정
         BUCKET_NAME = os.getenv("BUCKET_NAME")  # 환경 변수에서 가져오기
-        GCS_PATH = f"collected/sp500_top50_{today}.csv"  # GCS 내 저장 경로
+        GCS_PATH = f"collected/sp500_top50_{today}.parquet"  # GCS 내 저장 경로
 
         # 원본 데이터만 GCS에 저장
         upload_to_gcs(BUCKET_NAME, GCS_PATH, stock_df)
     else:
-        print("⚠ No data fetched. Check API availability.")
+        print("No data fetched. Check API availability.")
 
     # end_time = time.time()  # 종료 시간 기록
     # execution_time = end_time - start_time  # 실행 시간 계산
-    # print(f"⏱ Execution Time: {execution_time:.4f} seconds")
+    # print(f"Execution Time: {execution_time:.4f} seconds")
