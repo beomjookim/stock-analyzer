@@ -1,4 +1,4 @@
-![image](https://github.com/user-attachments/assets/bc109bb1-1c3a-474a-b7cd-8d5a0b98ddc1)# 📊 S&P 500 Stock year-long analyzer
+# 📊 S&P 500 Stock year-long analyzer
 
 
  <br/>
